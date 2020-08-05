@@ -1,0 +1,8 @@
+'product-correct', (0, 70)
+'factorial-correct', (512, 70)
+'accumulate-correct', (1024, 70)
+'summation_using_accumulate-correct', (1536, 70)
+'product_using_accumulate-correct', (2048, 70)
+'make_repeater-correct', (2560, 70)
+'num_sevens-correct', (3072, 70)
+'pingpong-correct', (3584, 70)
