@@ -12,6 +12,8 @@ triple = lambda x: 3 * x
 
 increment = lambda x: x + 1
 
+decrement = lambda x: x - 1
+
 ######################
 # Required Questions #
 ######################
@@ -157,7 +159,7 @@ def make_repeater(f, n):
     """
     return myAccumulate(compose1, lambda x: x, n, f)
 
-def num_sevens(n):
+def num_sevens(n, num7=0):
     """Returns the number of times 7 appears as a digit of n.
 
     >>> num_sevens(3)
@@ -179,8 +181,8 @@ def num_sevens(n):
     """
     "*** YOUR CODE HERE ***"
     if not n:
-        return 0
-    return  num_sevens(n // 10) + 1 if n % 10 == 7 else num_sevens(n // 10)
+        return num7
+    return  num_sevens(n // 10, num7 + 1) if n % 10 == 7 else num_sevens(n // 10, num7)
 
 def pingpong(n, k=1, step=1, index=1):
     """Return the nth element of the ping-pong sequence.
@@ -226,7 +228,7 @@ def pingpong(n, k=1, step=1, index=1):
         return k
     return pingpong(n, k - step, -step, index + 1) if '7' in str(index) or index % 7 == 0 else pingpong(n, k + step, step, index + 1)
 
-def count_change(amount):
+def count_change(amount, change=1):
     """Return the number of ways to make change for amount.
 
     >>> count_change(7)
@@ -242,6 +244,16 @@ def count_change(amount):
     True
     """
     "*** YOUR CODE HERE ***"
+    if amount == 0:
+        return 1
+    elif amount < 0:
+        return 0
+    elif change > amount:
+        return 0
+    return count_change(amount - change, change) + count_change(amount, change * 2)
+
+
+
 
 
 
@@ -249,6 +261,8 @@ def count_change(amount):
 ###################
 # Extra Questions #
 ###################
+
+hanoi_palce = 6
 
 def print_move(origin, destination):
     """Print instructions to move a disk."""
@@ -283,6 +297,13 @@ def move_stack(n, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    if n == 1:
+        print_move(start, end)
+    else:
+        other = hanoi_palce - start - end
+        move_stack(n - 1, start, other)
+        print_move(start, end)
+        move_stack(n - 1, other, end)
 
 from operator import sub, mul
 
@@ -295,7 +316,10 @@ def make_anonymous_factorial():
     >>> check(HW_SOURCE_FILE, 'make_anonymous_factorial', ['Assign', 'AugAssign', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    """
+    return (lambda f: lambda n: f(f, n))(lambda f, n: 1 if not n else mul(n, f(f, sub(n, 1)))) #普通递归, 匿名函数的递归
+    """
+    return (lambda f: lambda n: f(f, n))(lambda f, n, y=1: y if not n else f(f, sub(n, 1), mul(n, y))) #尾递归优化
 
 def zero(f):
     return lambda x: x
@@ -306,14 +330,16 @@ def successor(n):
 def one(f):
     """Church numeral 1: same as successor(zero)"""
     "*** YOUR CODE HERE ***"
+    return lambda x: f(zero(f)(x)) #f(x)
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
     "*** YOUR CODE HERE ***"
+    return lambda x: f(f(zero(f)(x))) #f(f(x))
 
 three = successor(two)
 
-def church_to_int(n):
+def church_to_int(n, base=0):
     """Convert the Church numeral n to a Python integer.
 
     >>> church_to_int(zero)
@@ -326,6 +352,7 @@ def church_to_int(n):
     3
     """
     "*** YOUR CODE HERE ***"
+    return n(increment)(base)
 
 def add_church(m, n):
     """Return the Church numeral for m + n, for Church numerals m and n.
@@ -334,6 +361,10 @@ def add_church(m, n):
     5
     """
     "*** YOUR CODE HERE ***"
+    return lambda f: lambda x: m(f)(n(f)(x))
+
+print(add_church(three, two)(decrement)(0))
+
 
 def mul_church(m, n):
     """Return the Church numeral for m * n, for Church numerals m and n.
@@ -345,6 +376,8 @@ def mul_church(m, n):
     12
     """
     "*** YOUR CODE HERE ***"
+    return lambda f: lambda x: m(n(f))(x)
+
 
 def pow_church(m, n):
     """Return the Church numeral m ** n, for Church numerals m and n.
@@ -355,3 +388,4 @@ def pow_church(m, n):
     9
     """
     "*** YOUR CODE HERE ***"
+    return  n(m)
