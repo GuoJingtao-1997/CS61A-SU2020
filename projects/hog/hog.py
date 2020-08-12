@@ -1,7 +1,7 @@
 """CS 61A Presents The Game of Hog."""
 
-from dice import six_sided, four_sided, make_test_dice
-from ucb import main, trace, interact
+from dice import four_sided, make_test_dice, six_sided
+from ucb import interact, main, trace
 
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 
@@ -277,14 +277,13 @@ def make_averaged(fn, num_samples=1000):
             outcomes_len = len(outcomes)
             args_period = num_samples // outcomes_len
             remainder = num_samples % outcomes_len
-            averaged_dice = sum(outcomes) * args_period / num_samples
             if outcomes_len == 1:
-                averaged_dice = outcomes[0]
+                averaged_dice = outcomes[0] * args_period / num_samples
             elif remainder != 0:
                 remainder_sum = 0
                 for i in range(remainder - 1):
                     remainder_sum += args[i]
-                averaged_dice = (averaged_dice + remainder_sum) / num_samples
+                averaged_dice = (sum(outcomes) * args_period + remainder_sum) / num_samples
         else: 
             num = num_samples
             while num:
