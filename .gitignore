@@ -4,3 +4,4 @@ db.json
 *.log
 .vscode/
 .history/
+__pycache__/
