@@ -277,13 +277,13 @@ def make_averaged(fn, num_samples=1000):
             outcomes_len = len(outcomes)
             args_period = num_samples // outcomes_len
             remainder = num_samples % outcomes_len
-            if outcomes_len == 1:
-                averaged_dice = outcomes[0] * args_period / num_samples
-            elif remainder != 0:
+            if remainder != 0:
                 remainder_sum = 0
-                for i in range(remainder - 1):
+                for i in range(remainder):
                     remainder_sum += args[i]
                 averaged_dice = (sum(outcomes) * args_period + remainder_sum) / num_samples
+            else:
+                averaged_dice = sum(outcomes) * args_period / num_samples
         else: 
             num = num_samples
             while num:
