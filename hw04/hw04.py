@@ -228,10 +228,12 @@ def has_path(t, phrase):
     branch_num, branches_len = 0, len(branches(t))
     if len(phrase) == 1:
         return label(t) == phrase
+    elif label(t) != phrase[0]:
+        return False
     for branch in branches(t):
         branch_num += 1
         if label(branch) == phrase[1]:
-            return label(t) == phrase[0] and has_path(branch, phrase[1:])
+            return has_path(branch, phrase[1:])
         elif branch_num == branches_len:
             return False
     
