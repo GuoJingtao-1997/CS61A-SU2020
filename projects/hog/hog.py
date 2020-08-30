@@ -184,7 +184,7 @@ def both(f, g):
     return say
 
 
-def announce_highest(who, previous_high=0, previous_score=0):
+def announce_highest(who, pre_high=0, pre_score=0):
     """Return a commentary function that announces when WHO's score
     increases by more than ever before in the game.
 
@@ -209,21 +209,17 @@ def announce_highest(who, previous_high=0, previous_score=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
-    def commentary(score0, score1, pre_high=previous_high, pre_score=previous_score):
+    def commentary(score0, score1):
         if who == 0:
             current_high = score0 - pre_score
-            if current_high > pre_high:
-                print(current_high,"point(s)! That's the biggest gain yet for Player",who)
-                pre_high = current_high
-            pre_score = score0
-        else:
+            score = score0
+        elif who == 1:
             current_high = score1 - pre_score
-            if current_high > pre_high:
-                print(current_high,"point(s)! That's the biggest gain yet for Player",who)
-                pre_high = current_high
-            pre_score = score1
-        return announce_highest(who, pre_high, pre_score)
+            score = score1
+        if current_high > pre_high:
+            print("{0} point(s)! That's the biggest gain yet for Player {1}".format(current_high, who))
+            high = current_high
+        return announce_highest(who, high, score)
     return commentary
     # END PROBLEM 7
 
