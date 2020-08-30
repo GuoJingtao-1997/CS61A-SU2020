@@ -94,29 +94,28 @@ def group_by(s, fn):
             group[i] += [n]
     return dict(sorted(group.items(), key=lambda d: d[0]))
 
-# def partition_options(total, biggest):
-#     """outputs all the ways to partition a number
-#     total using numbers no larger than biggest.
+def partition_options(total, biggest, part=[], num=0):
+    """outputs all the ways to partition a number
+    total using numbers no larger than biggest.
 
-#     >>> partition_options(2, 2)
-#     [[2], [1, 1]]
-#     >>> partition_options(3, 3)
-#     [[3], [2, 1], [1, 1, 1]]
-#     >>> partition_options(4, 3)
-#     [[3, 1], [2, 2], [2, 1, 1], [1, 1, 1, 1]]
-#     """
-#     if not total or total == 1:
-#         return biggest
-#     elif total < 0 or not biggest:
-#         return []
-#     else:
-#         with_biggest = partition_options(total - biggest, biggest)
-#         without_biggest = partition_options(total, biggest - 1)
-#         with_biggest = [[with_biggest] + without_biggest]
-#     return with_biggest + without_biggest
+    >>> partition_options(2, 2)
+    [[2], [1, 1]]
+    >>> partition_options(3, 3)
+    [[3], [2, 1], [1, 1, 1]]
+    >>> partition_options(4, 3)
+    [[3, 1], [2, 2], [2, 1, 1], [1, 1, 1, 1]]
+    """
+    if not total:
+        return [part]
+    elif total < 0 or not biggest:
+        return []
+    else:
+        with_biggest = partition_options(total - biggest, biggest, part + [biggest], num + 1)
+        without_biggest = partition_options(total, biggest - 1, part, num + 1)
+    return with_biggest + without_biggest
     
 
-def min_elements(T, lst, num=0):
+def min_elements(T, lst):
     """Return the minimum number of elements from the list that 
     need to be summed in order to add up to T.
 
@@ -138,4 +137,4 @@ def min_elements(T, lst, num=0):
         elif T < 0:
             return min_num(T + lst[0] * num, lst[1:], 0)
         return min_num(T - lst[0], lst, num + 1)
-    return min_num(T - lst[0], lst, num + 1)
+    return min_num(T - lst[0], lst, 1)
