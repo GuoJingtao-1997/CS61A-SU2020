@@ -74,13 +74,14 @@ def has_cycle(link):
     >>> has_cycle(u)
     False
     """
-    l = link
-    while True:
-        if link.rest is Link.empty or link is Link.empty:
-            return False
-        elif link.rest is l:
+    old_link = []
+    while link is not Link.empty:
+        if link in old_link:
             return True
+        old_link.append(link)
         link = link.rest
+    return False
+
     
 def has_cycle_constant(link):
     """Return whether link contains a cycle.
