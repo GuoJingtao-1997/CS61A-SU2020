@@ -64,7 +64,6 @@ def filter_no_iter(link, f):
         return 
     elif f(link.first):
         return [link.first] + filter_no_iter(link.rest,f)
-    filter_no_iter(link.rest, f)
     
 def make_even(t):
     """
