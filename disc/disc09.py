@@ -40,16 +40,18 @@ def filter_link(link, f):
     >>> g = filter_link(link, lambda x: x % 2 == 0)
     >>> next(g)
     2
+    >>> next(g)
+    StopIteration
     >>> list(filter_link(link, lambda x: x % 2 != 0))
     [1, 3]
     """
-    try:
-        while link != Link.empty:
+    while link != Link.empty:
+        try:
             if f(link.first):
                 yield link.first
             link = link.rest
-    except StopIteration:
-        print("StopIteration")
+        except StopIteration:
+            print("StopIteration")
         
 
 def filter_no_iter(link, f):
